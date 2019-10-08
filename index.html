@@ -1,0 +1,86 @@
+<!DOCTYPE>
+<html>
+<head> 
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<title>ダイエット</title>
+</head>
+<body>
+<div id="app">
+  <div class="input-area">
+    <label>男：<input name="sex" type="radio" value="1" v-model="sex"></label>
+    <label>女：<input name="sex" type="radio" value="2" v-model="sex"></label>
+  </div>
+
+  <div class="input-area">
+    <label>年齢：
+      <input name="age" type="text" v-model="age" >
+    </label>
+  </div>
+
+  <div class="input-area">
+    <label>身長(cm)：
+      <input name="height" type="text" v-model="height" >
+    </label>
+  </div>
+
+  <div class="input-area">
+    <label>体重(kg)：
+      <input name="weight" type="text" v-model="weight" >
+    </label>
+  </div>
+
+  <div class="input-area">
+    <label>運動量(kcal)：
+      <input name="metabolism" type="text" v-model="metabolism" >
+    </label>
+  </div>
+
+  <div class="input-area">
+    <label>摂取カロリー(kcal)：
+      <input name="dailyCalorie" type="text" v-model="dailyCalorie" >
+    </label>
+  </div>
+
+  <div class="input-area">
+    <label>新しい体重(kg)：
+      <input name="newWeight" type="text" v-model="newWeight" disabled>
+    </label>
+  </div>
+</div>
+
+<script>
+var app = new Vue({
+  el: '#app',
+  data: {
+    sex: 1,
+    age: "",
+    height: "",
+    weight: "",
+    metabolism: "",
+    dailyCalorie: ""
+  },
+  computed: {
+    convert() {
+      return 7200;
+    },
+    basalMetabolism() {
+      if(!(this.weight && this.height && this.age)) {
+        return "";
+      }
+      return this.sex == 1 ?
+        13.397 * this.weight + 4.799 * this.height - 5.677 * this.age + 88.362:
+        9.247 * this.weight  + 3.098 * this.height - 4.33 * this.age + 447.593
+    },
+    newWeight() {
+      if(!(this.weight && this.metabolism && this.dailyCalorie)) {
+        return "";
+      }
+      const kcal = this.dailyCalorie - this.metabolism - this.basalMetabolism;
+      return ((this.weight * this.convert) + kcal) / this.convert;
+    }
+  }
+})
+</script>
+</body>
+</html>
